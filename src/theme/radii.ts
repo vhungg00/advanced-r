@@ -1,0 +1,17 @@
+export const radii = {
+  none: '0',
+  sm: '2px',
+  base: '4px',
+  md: '6px',
+  lg: '8px',
+  '2lg': '10px',
+  xl: '12px',
+  '2xl': '16px',
+  '2.5xl': '20px',
+  '3xl': '24px',
+  '4xl': '30px',
+  '5xl': '32px',
+  top: '8px 8px 0px 0px',
+  bottom: '0 0 4px 4px',
+  full: '9999px',
+}

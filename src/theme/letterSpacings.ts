@@ -1,0 +1,17 @@
+export const letterSpacings = {
+  tighter: '-0.8px',
+  tight: '-0.4px',
+  normal: '0',
+  xs: '0.144px',
+  '2xs': '0.168px',
+  sm: '0.24px',
+  wide: '0.4px',
+  top: '0.489px',
+  md: '0.6px',
+  xl: '0.7px',
+  wider: '0.8px',
+  lg: '1.1px',
+  widest: '1.6px',
+  base: '1.2px',
+  basis: '1px',
+}
