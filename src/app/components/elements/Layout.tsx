@@ -8,10 +8,10 @@ export const Layout: FC<{
 }> = ({ children }) => {
   return (
     <Flex
-      flexDirection={'column'}
-      flex={1}
-      width={'full'}
       backgroundColor={'white'}
+      flex={1}
+      flexDirection={'column'}
+      width={'full'}
     >
       {/* Common Header */}
       {children || <Outlet />}
