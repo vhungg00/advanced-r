@@ -1,7 +1,7 @@
 export const colors = {
   transparent: 'transparent',
   black: '#000',
-  white: '#fff',
+  white: '#ffffff',
   primary: {
     100: '#EAEAEA',
     200: '#d2e8e4',
@@ -14,7 +14,7 @@ export const colors = {
     900: '#02524e',
   },
   blue: {
-    100: '#84C5FF',
+    100: '#add8e6',
     200: '#6AAAFF',
     300: '#5090FF',
     400: '#3576E0',

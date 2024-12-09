@@ -1,7 +1,16 @@
-import { FC, memo, useCallback, useEffect, useRef } from 'react'
-import { Center, ChakraProps, Flex } from '@chakra-ui/react'
+import { FC, memo, useCallback, useEffect, useMemo, useRef } from 'react'
+import {
+  Box,
+  Center,
+  ChakraProps,
+  Flex,
+  ListItem,
+  useTheme,
+} from '@chakra-ui/react'
 import { IconArrowWheel } from 'app/components/elements/Icons/IconArrowWheel'
 import { Prizes } from 'services/luckyWheelServices'
+import styled from '@emotion/styled'
+import { images } from 'assets'
 
 type Props = {
   id: string
@@ -28,6 +37,27 @@ const Component: FC<Props> = props => {
     transitionDuration: `${styleRotate?.timeDuration}s`,
   }
 
+  const theme = useTheme()
+
+  const generateHTMLString = (
+    i: number,
+    turnNum: number,
+    length: number,
+    prizeList: Prizes[],
+  ) => `
+        <li>
+          <div class="inner" style="transform: rotate(${i * turnNum}turn); width: ${
+            (100 / length) * 2 - 2
+          }%" >
+            <div class="content">
+              <img src="${prizeList[i].image}" style="margin: 0 auto" />
+              <div class="text-wrap">
+                <p class="name-prize" style="margin-top: 5px">${prizeList[i].name}</p>
+              </div>
+            </div>
+          </div>
+        </li>`
+
   // function to drawl lucky wheel with canvas
   const drawWheel = useCallback(
     (prizes: Prizes[]) => {
@@ -36,7 +66,7 @@ const Component: FC<Props> = props => {
       const turnNum = 1 / length
       const html = []
 
-      const ulElementFirstRender = document.querySelector('.list')
+      const ulElementFirstRender = document.getElementsByTagName('ul')[0]
 
       if (ulElementFirstRender) {
         ulElementFirstRender.remove()
@@ -56,11 +86,17 @@ const Component: FC<Props> = props => {
         ctx.moveTo(0, 0)
         ctx.rotate((((360 / length) * i - rotateDeg) * Math.PI) / 180)
         ctx.arc(0, 0, 250, 0, (2 * Math.PI) / length, false)
-        ctx.fillStyle = i % 2 === 0 ? '#add8e6' : '#ffffff'
+        ctx.fillStyle =
+          i % 2 === 0 ? `${theme.colors.blue[100]}` : `${theme.colors.white}`
         ctx.fill()
         ctx.restore()
+        const htmlString = generateHTMLString(i, turnNum, length, prizeList)
+        html.push(htmlString)
       }
+      containerRef?.current.appendChild(prizeItems)
+      prizeItems.innerHTML = html.join('')
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [id],
   )
 
@@ -69,13 +105,16 @@ const Component: FC<Props> = props => {
   }, [drawWheel, prizes])
 
   return (
-    <Flex flex={1}>
+    <Flex flex={1} justifyContent={'center'}>
       <Flex
-        alignItems={'center'}
+        borderRadius={'50%'}
         flexDirection={'column'}
+        height={'600px'}
         id={id}
         position={'relative'}
-        w={'full'}
+        w={'600px'}
+        alignItems={'center'}
+        justifyContent={'center'}
       >
         <Center
           ref={arrowRef}
@@ -85,24 +124,76 @@ const Component: FC<Props> = props => {
         >
           <IconArrowWheel />
         </Center>
-        <Flex
+        <img
+          style={{ position: 'absolute', width: '100%', top: '0', left: '0' }}
+          src={images.imageWheelBorder}
+          alt={'wheel-border'}
+        />
+        <WrapperWheel
           ref={containerRef}
           __css={styleRotate?.deg !== DEFAULT_DEG ? styleWheel : {}}
           className={'wheel'}
-          css={{
-            '& > canvas': {
-              width: 'inherit',
-              height: 'inherit',
-            },
-          }}
           flexDirection={'column'}
-          position={'absolute'}
+          h={'520px'}
+          w={'520px'}
+          position={'relative'}
         >
           <canvas ref={wheelRef} height={'500px'} width={'500px'} />
-        </Flex>
+        </WrapperWheel>
       </Flex>
     </Flex>
   )
 }
 
 export const LuckyWheel = memo(Component)
+
+const WrapperWheel = styled(Flex)`
+  & > canvas {
+    width: inherit;
+    height: inherit;
+    border-radius: 50%;
+  }
+  & ul {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: inherit;
+    height: inherit;
+    z-index: 2;
+  }
+  & ul,
+  & li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  & ul li {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    font-weight: bold;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6);
+    > .inner {
+      position: relative;
+      display: block;
+      top: -10px;
+      padding-top: 30px;
+      margin: 0 auto;
+      text-align: center;
+      -webkit-transform-origin: 50% 270px;
+      -ms-transform-origin: 50% 270px;
+      transform-origin: 50% 270px;
+    }
+    .inner .content {
+      flex-direction: column;
+      align-items: center;
+    }
+    .inner .content .text-wrap {
+      justify-content: center;
+      width: 80px;
+      margin: 0 auto;
+    }
+  }
+`
