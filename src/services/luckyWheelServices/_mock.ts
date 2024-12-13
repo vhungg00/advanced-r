@@ -1,4 +1,3 @@
-import { images } from 'assets'
 import { PrizeResponse } from './luckyWheelServices.type'
 
 export const dataPrizes: PrizeResponse = {

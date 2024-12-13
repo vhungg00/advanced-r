@@ -12,6 +12,21 @@ import 'sanitize.css/sanitize.css'
 // Initialize axios
 configureAxios()
 
+// fake comment
+function emitComment(id: number) {
+  setInterval(() => {
+    window.dispatchEvent(
+      new CustomEvent(`chanel-${id}`, {
+        detail: `Content chanel ${id}`,
+      }),
+    )
+  }, 2000)
+}
+
+emitComment(1)
+emitComment(2)
+emitComment(3)
+
 /**
  * Root App
  */

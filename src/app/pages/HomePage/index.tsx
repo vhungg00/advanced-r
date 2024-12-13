@@ -1,10 +1,14 @@
+import { useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import styled from '@emotion/styled'
+import { Content } from './components/modules/Content'
 
 /**
  * @returns Component Home Page
  */
 export function HomePage() {
+  const [show, setShow] = useState<boolean>(false)
+
   return (
     <Wrapper>
       <Helmet>
@@ -13,6 +17,10 @@ export function HomePage() {
       </Helmet>
       <div>
         <Title>Hello World</Title>
+      </div>
+      <div style={{ flexDirection: 'column' }}>
+        <button onClick={() => setShow(!show)}>Toggle</button>
+        {show && <Content />}
       </div>
     </Wrapper>
   )
