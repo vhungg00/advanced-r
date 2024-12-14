@@ -43,16 +43,15 @@ export const Content = () => {
   // }, [activeChanel])
 
   useLayoutEffect(() => {
-    console.log('callback')
-
     if (counter > 3) setCounter(0)
-    return () => {
-      console.log('cleanUp')
-    }
   }, [counter])
 
   const handleIncrease = () => {
     setCounter(counter + 1)
+
+    return () => {
+      console.log('clean up')
+    }
   }
 
   return (

@@ -30,29 +30,13 @@ export const GlobalStyle = () => {
         body {
           font-family: 'Roboto', sans-serif;
           font-optical-sizing: auto;
-          height: max-content;
+          min-height: max-content;
         }
+
         #root {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
           width: 100%;
-        }
-
-        div {
+          height: 100%;
           display: flex;
-        }
-
-        .flex-row {
-          flex-direction: row;
-        }
-
-        .container {
-          width: 100%;
-          max-width: 1140px;
-          padding-left: 10px;
-          padding-right: 10px;
-          margin: 0 auto;
         }
 
         ::placeholder {
@@ -90,6 +74,16 @@ export const GlobalStyle = () => {
         }
         .overflow-x-hidden {
           overflow-x: hidden;
+        }
+        @keyframes rotate {
+          from {
+            transform: rotate(0deg);
+            transition-timing-function: ease-in-out;
+          }
+          to {
+            transform: rotate(-30deg);
+            transition-timing-function: ease-in-out;
+          }
         }
       `}
     />
