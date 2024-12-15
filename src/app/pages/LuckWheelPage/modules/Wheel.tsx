@@ -14,7 +14,7 @@ type Props = {
 
 const Component: FC<Props> = props => {
   const DEFAULT_DEG = 0
-  const arrowRef = useRef<HTMLDivElement | null>(null)
+  const needleRef = useRef<HTMLDivElement | null>(null)
   const wheelRef = useRef<HTMLCanvasElement | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
   const animationFrameId = useRef<number | null>(null)
@@ -88,13 +88,13 @@ const Component: FC<Props> = props => {
 
   useEffect(() => {
     const rotateArrow = () => {
-      if (!arrowRef.current) return
+      if (!needleRef.current) return
 
       if (spinning && timeNeedleRotate) {
-        arrowRef.current.style.animation = `rotate ${timeNeedleRotate}s linear infinite`
+        needleRef.current.style.animation = `rotate ${timeNeedleRotate}s linear infinite`
         animationFrameId.current = requestAnimationFrame(rotateArrow)
       } else {
-        arrowRef.current.style.animation = ''
+        needleRef.current.style.animation = ''
         if (animationFrameId.current) {
           cancelAnimationFrame(animationFrameId.current)
           animationFrameId.current = null
@@ -118,7 +118,7 @@ const Component: FC<Props> = props => {
   return (
     <Box>
       <Box m={'30px auto'} maxW={'600px'}>
-        <Box id={id} position={'relative'} pb={'100%'}>
+        <Box id={id} overflow={'hidden'} pb={'100%'} position={'relative'}>
           <Center
             __css={{
               '& > img': {
@@ -132,8 +132,8 @@ const Component: FC<Props> = props => {
             w={'12%'}
             zIndex={10}
           >
-            <Box ref={arrowRef} transformOrigin={'center'}>
-              <img alt="lucky-arrow" src={images.imageLuckyArrow} />
+            <Box ref={needleRef} transformOrigin={'center'}>
+              <img alt="lucky-needle" src={images.imageLuckyNeedle} />
             </Box>
           </Center>
           <Center

@@ -29,7 +29,7 @@ export function LuckyWheelPage() {
   const [spinning, setSpinning] = useState<boolean>(false)
   const [time, setTime] = useState<Dayjs>()
   const [listPrizeWon, setListPrizeWon] = useState<PrizeWon[]>([])
-  const [timeNeedleRotate, setTimeNeedleRotate] = useState<number>(1)
+  const [timeNeedleRotate, setTimeNeedleRotate] = useState<number>(0)
   const [styleRotate, setStyleRotate] =
     useState<StyleRotate>(initialStyleRotate)
   const [indexPrizeWon, setIndexPrizeWon] = useState<number | null>(null)
@@ -37,7 +37,7 @@ export function LuckyWheelPage() {
   console.log(listPrizeWon)
 
   const handleSpin = () => {
-    if (countSpin <= 0) return
+    if (countSpin <= 0 || spinning) return
     setSpinning(true)
     setCountSpin(prev => prev - 1)
     setTime(dayjs())
@@ -51,8 +51,10 @@ export function LuckyWheelPage() {
     ])
   }
 
+  console.log({ timeNeedleRotate })
+
   useEffect(() => {
-    if (indexPrizeWon !== null && time) {
+    if (indexPrizeWon !== null && time && spinning) {
       const timeCall = getTimeDifference(time, dayjs())
       let d = styleRotate.deg
       d =
@@ -62,19 +64,25 @@ export function LuckyWheelPage() {
       const timeRotate = CURRENT_TIME_DURATION_LUCKY_WHEEL_ROTATE - timeCall
       setStyleRotate({
         deg: d,
-        timingFunc: 'ease',
+        timingFunc: 'ease-in-out',
         timeDuration: timeRotate,
       })
+      // Cập nhật thời gian quay của needle
       setTimeNeedleRotate(((timeRotate / 10) * 1) / 4)
+
+      /**
+       * Giảm tốc độ của kim sau khoảng thời gian tốc độ lucky wheel quay với gia tốc đều time = (timeRotate / 10) * 3 / 4) * 10000
+       */
       setTimeout(
         () => {
           setTimeNeedleRotate(((timeRotate / 10) * 3) / 4)
         },
-        (((timeRotate / 10) * 3) / 4) * 10000,
+        (((timeRotate / 10) * 3) / 4) * 9000,
       )
+      setIndexPrizeWon(null)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [indexPrizeWon])
+  }, [indexPrizeWon, spinning])
 
   useEffect(() => {
     if (!spinning) return
@@ -129,6 +137,7 @@ export function LuckyWheelPage() {
         backgroundSize={'cover'}
         flex={1}
         flexDirection={'column'}
+        p={'0 16px'}
       >
         <Flex
           justifyContent={'center'}
@@ -141,10 +150,10 @@ export function LuckyWheelPage() {
         >
           <img alt={'logo-app'} src={images.imageLogoApp} />
         </Flex>
-        <Center>
+        <Center margin={'0 auto'} width={'50%'}>
           <img alt={'slogan'} src={images.imageSlogan} />
         </Center>
-        <Box p={'0 16px'}>
+        <Box>
           <LuckyWheel
             id={ID_LUCKY_WHEEL}
             prizes={prizes}

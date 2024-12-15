@@ -6,7 +6,7 @@ export const dataPrizes: PrizeResponse = {
       name: 'Bộ trà',
       image:
         'https://app.woay.vn/w/111a4b97-f4cb-4171-9c5b-034395db5d8a/assets/9e0c6678-31d6-442c-9ac6-f9eda616be8e.png',
-      percent_page: 0.01, // 1%
+      percent_page: 80, // 1%
     },
     {
       name: 'E-Voucher 100k',
