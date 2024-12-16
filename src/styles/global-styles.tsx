@@ -31,6 +31,7 @@ export const GlobalStyle = () => {
           font-family: 'Roboto', sans-serif;
           font-optical-sizing: auto;
           min-height: max-content;
+          position: relative;
         }
 
         #root {

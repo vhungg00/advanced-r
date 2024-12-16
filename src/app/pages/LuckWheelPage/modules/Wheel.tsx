@@ -31,7 +31,7 @@ const Component: FC<Props> = props => {
   const drawWheel = useCallback(
     (prizes: Prizes[]) => {
       const length = prizes?.length
-      const rotateDeg = 360 / length / 2 + 90
+      const rotateDeg = 360 / length / 2
 
       if (!wheelRef.current) return
 
@@ -139,7 +139,6 @@ const Component: FC<Props> = props => {
           <Center
             backgroundColor={'white'}
             borderRadius={'50%'}
-            cursor={'pointer'}
             h={'24%'}
             left={'50%'}
             position={'absolute'}

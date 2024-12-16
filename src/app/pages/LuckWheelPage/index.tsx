@@ -8,8 +8,9 @@ import { images } from 'assets'
 import { randomIndex } from 'utils/randomIndex'
 import dayjs, { Dayjs } from 'dayjs'
 import { getTimeDifference } from 'utils/function'
-import { PrizeWon, StyleRotate } from './const/types'
+import { PrizeWon, StyleRotate, WinningResult } from './const/types'
 import { LuckyWheel } from './modules/Wheel'
+import { WinnerNoticeDialog } from './modules/WinnerNoticeDialog'
 
 const ID_LUCKY_WHEEL = 'lucky-wheel'
 
@@ -29,12 +30,16 @@ export function LuckyWheelPage() {
   const [spinning, setSpinning] = useState<boolean>(false)
   const [time, setTime] = useState<Dayjs>()
   const [listPrizeWon, setListPrizeWon] = useState<PrizeWon[]>([])
+  const [winningResult, setWinningResult] = useState<WinningResult>({
+    name: '',
+    img: '',
+  })
+  const [isOpen, setIsOpen] = useState<boolean>(false)
   const [timeNeedleRotate, setTimeNeedleRotate] = useState<number>(0)
+  const timeoutRef = useRef<NodeJS.Timeout>()
   const [styleRotate, setStyleRotate] =
     useState<StyleRotate>(initialStyleRotate)
   const [indexPrizeWon, setIndexPrizeWon] = useState<number | null>(null)
-
-  console.log(listPrizeWon)
 
   const handleSpin = () => {
     if (countSpin <= 0 || spinning) return
@@ -42,6 +47,7 @@ export function LuckyWheelPage() {
     setCountSpin(prev => prev - 1)
     setTime(dayjs())
     const rand = randomIndex(prizes)
+    console.log(rand)
     setIndexPrizeWon(rand)
     const { name, image } = prizes[rand]
     setTimeNeedleRotate(CURRENT_TIME_DURATION_NEEDLE_ROTATE)
@@ -51,29 +57,25 @@ export function LuckyWheelPage() {
     ])
   }
 
-  console.log({ timeNeedleRotate })
-
   useEffect(() => {
     if (indexPrizeWon !== null && time && spinning) {
-      const timeCall = getTimeDifference(time, dayjs())
+
       let d = styleRotate.deg
-      d =
-        d +
-        (360 - (d % 360)) +
-        (360 * 10 - indexPrizeWon * (360 / prizes.length))
-      const timeRotate = CURRENT_TIME_DURATION_LUCKY_WHEEL_ROTATE - timeCall
+      d = d + (360 - (d % 360)) + (360 * 10 - indexPrizeWon * (360 / prizes.length))
+      const timeRotate = CURRENT_TIME_DURATION_LUCKY_WHEEL_ROTATE 
+
       setStyleRotate({
         deg: d,
         timingFunc: 'ease-in-out',
         timeDuration: timeRotate,
       })
-      // Cập nhật thời gian quay của needle
+      setWinningResult({
+        name: prizes[indexPrizeWon].name,
+        img: prizes[indexPrizeWon].image,
+      })
       setTimeNeedleRotate(((timeRotate / 10) * 1) / 4)
 
-      /**
-       * Giảm tốc độ của kim sau khoảng thời gian tốc độ lucky wheel quay với gia tốc đều time = (timeRotate / 10) * 3 / 4) * 10000
-       */
-      setTimeout(
+      timeoutRef.current = setTimeout(
         () => {
           setTimeNeedleRotate(((timeRotate / 10) * 3) / 4)
         },
@@ -81,23 +83,28 @@ export function LuckyWheelPage() {
       )
       setIndexPrizeWon(null)
     }
+
+    return () => {
+      if (timeoutRef.current && !spinning) clearTimeout(timeoutRef.current)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [indexPrizeWon, spinning])
+  }, [indexPrizeWon, spinning, prizes])
 
   useEffect(() => {
     if (!spinning) return
     const el = document.getElementById(ID_LUCKY_WHEEL)
     if (!el) return
-    const elWhell = el.querySelector('.wheel')
-    if (!elWhell) return
+    const elWheel = el.querySelector('.wheel')
+    if (!elWheel) return
 
     const handleAfterWheelFinished = () => {
       setSpinning(false)
+      setIsOpen(true)
     }
-    elWhell.addEventListener('transitionend', handleAfterWheelFinished)
+    elWheel.addEventListener('transitionend', handleAfterWheelFinished)
 
     return () => {
-      elWhell.removeEventListener('transitionend', handleAfterWheelFinished)
+      elWheel.removeEventListener('transitionend', handleAfterWheelFinished)
     }
   }, [spinning])
 
@@ -166,9 +173,11 @@ export function LuckyWheelPage() {
           <Box maxW={'500px'} w={'full'}>
             <Button
               _disabled={{ backgroundImage: '#dedede' }}
-              _hover={{ backgroundColor: 'rgb(248, 208, 98)' }}
-              backgroundColor={'rgb(255, 182, 0)'}
-              color={'#a42121'}
+              _hover={{ backgroundColor: 'rgb(255, 182, 0)' }}
+              backgroundColor={'#edbf41'}
+              boxShadow={'0 3px 0 0 #c08900'}
+              color={'white'}
+              letterSpacing={'unset'}
               width={'full'}
               onClick={handleSpin}
             >
@@ -177,6 +186,11 @@ export function LuckyWheelPage() {
           </Box>
         </Flex>
       </Flex>
+      <WinnerNoticeDialog
+        isOpen={isOpen}
+        winningResult={winningResult}
+        onClose={() => setIsOpen(false)}
+      />
     </Fragment>
   )
 }
