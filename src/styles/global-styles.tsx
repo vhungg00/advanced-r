@@ -15,12 +15,10 @@ export const GlobalStyle = () => {
           -webkit-text-size-adjust: none;
           text-size-adjust: none;
         }
-        html {
-          height: 100%;
-        }
         html,
         body {
           width: 100%;
+          min-height: 100dvh;
           display: flex;
           color: #444444;
           font-size: 14px;
@@ -30,13 +28,11 @@ export const GlobalStyle = () => {
         body {
           font-family: 'Roboto', sans-serif;
           font-optical-sizing: auto;
-          min-height: max-content;
           position: relative;
         }
 
         #root {
           width: 100%;
-          height: 100%;
           display: flex;
         }
 
