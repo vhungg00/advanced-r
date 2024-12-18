@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import styled from '@emotion/styled'
-import { Body, Dialog, Header } from 'app/components/modules/Dialog'
+import { ProfileWithUser, UserContextProvider } from 'contexts/UserContext'
+import { Content } from './components/modules/Content'
 
 /**
  * @returns Component Home Page
@@ -18,17 +19,13 @@ export function HomePage() {
       <div>
         <Title>Hello World</Title>
       </div>
-      <div style={{ flexDirection: 'column' }}>
-        <button onClick={() => setShow(!show)}>Toggle</button>
-        <Dialog isOpen={show} onClickOverlay={() => setShow(false)}>
-          <Header>
-            <div>
-              <h1>header</h1>
-            </div>
-          </Header>
-          <Body>body</Body>
-        </Dialog>
-      </div>
+      <UserContextProvider>
+        <div style={{ flexDirection: 'column' }}>
+          <button onClick={() => setShow(!show)}>Toggle</button>
+          <ProfileWithUser />
+          {show && <Content />}
+        </div>
+      </UserContextProvider>
     </Wrapper>
   )
 }
