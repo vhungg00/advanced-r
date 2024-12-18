@@ -115,6 +115,8 @@ const Component: FC<Props> = props => {
     void drawWheel(prizes)
   }, [drawWheel, prizes])
 
+  console.log('re-render')
+
   return (
     <Box>
       <Box m={'30px auto'} maxW={'600px'}>

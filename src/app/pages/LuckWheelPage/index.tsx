@@ -7,7 +7,6 @@ import { Box, Button, Center, Flex } from '@chakra-ui/react'
 import { images } from 'assets'
 import { randomIndex } from 'utils/randomIndex'
 import dayjs, { Dayjs } from 'dayjs'
-import { getTimeDifference } from 'utils/function'
 import { PrizeWon, StyleRotate, WinningResult } from './const/types'
 import { LuckyWheel } from './modules/Wheel'
 import { WinnerNoticeDialog } from './modules/WinnerNoticeDialog'
@@ -59,10 +58,12 @@ export function LuckyWheelPage() {
 
   useEffect(() => {
     if (indexPrizeWon !== null && time && spinning) {
-
       let d = styleRotate.deg
-      d = d + (360 - (d % 360)) + (360 * 10 - indexPrizeWon * (360 / prizes.length))
-      const timeRotate = CURRENT_TIME_DURATION_LUCKY_WHEEL_ROTATE 
+      d =
+        d +
+        (360 - (d % 360)) +
+        (360 * 10 - indexPrizeWon * (360 / prizes.length))
+      const timeRotate = CURRENT_TIME_DURATION_LUCKY_WHEEL_ROTATE
 
       setStyleRotate({
         deg: d,
