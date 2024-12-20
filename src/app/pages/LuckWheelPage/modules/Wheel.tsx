@@ -48,6 +48,9 @@ const Component: FC<Props> = props => {
         ctx.rotate((((360 / length) * i - rotateDeg) * Math.PI) / 180)
         ctx.arc(0, 0, 250, 0, (2 * Math.PI) / length, false)
         const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, 300)
+
+        console.log(gradient)
+
         if (i % 2 === 0) {
           gradient.addColorStop(0, theme.colors.blue[500])
           gradient.addColorStop(1, theme.colors.blue[100])

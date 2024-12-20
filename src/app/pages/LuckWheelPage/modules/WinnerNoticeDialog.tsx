@@ -1,8 +1,8 @@
 import { FC, useEffect, useRef } from 'react'
 import { Flex, Text, Button } from '@chakra-ui/react'
 import { Body, Dialog, Header } from 'app/components/modules/Dialog'
-import { WinningResult } from '../const/types'
 import JSConfetti from 'js-confetti'
+import { WinningResult } from '../const/types'
 
 type Props = {
   isOpen: boolean
@@ -17,11 +17,13 @@ export const WinnerNoticeDialog: FC<Props> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const jsConfettiRef = useRef<JSConfetti | null>(null)
+
   useEffect(() => {
     if (!jsConfettiRef.current && canvasRef.current) {
       jsConfettiRef.current = new JSConfetti({ canvas: canvasRef.current })
     }
   }, [])
+
   useEffect(() => {
     if (isOpen && jsConfettiRef.current) {
       jsConfettiRef.current.addConfetti({

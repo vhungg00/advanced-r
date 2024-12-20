@@ -128,6 +128,8 @@ export function LuckyWheelPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const [show, setShow] = useState<boolean>(false)
+
   return (
     <Fragment>
       <Helmet>
@@ -186,6 +188,8 @@ export function LuckyWheelPage() {
             </Button>
           </Box>
         </Flex>
+        <Flex>{show && <div>show</div>}</Flex>
+        <button onClick={() => setShow(!show)}>Click me!</button>
       </Flex>
       <WinnerNoticeDialog
         isOpen={isOpen}

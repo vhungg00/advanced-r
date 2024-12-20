@@ -1,14 +1,34 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import styled from '@emotion/styled'
 import { ProfileWithUser, UserContextProvider } from 'contexts/UserContext'
+import { Flex } from '@chakra-ui/react'
 import { Content } from './components/modules/Content'
+import { ViewVideo } from './components/elements/ViewVideo'
+
+export interface ViewVideoHandle {
+  play: () => void
+  pause: () => void
+}
 
 /**
  * @returns Component Home Page
  */
 export function HomePage() {
   const [show, setShow] = useState<boolean>(false)
+  const videoRef = useRef<ViewVideoHandle>(null)
+
+  const handlePlay = () => {
+    videoRef.current?.play()
+  }
+  const handlePause = () => {
+    videoRef.current?.pause()
+  }
+
+  console.log(videoRef.current)
+  useEffect(() => {
+    console.log(videoRef.current)
+  }, [])
 
   return (
     <Wrapper>
@@ -26,6 +46,11 @@ export function HomePage() {
           {show && <Content />}
         </div>
       </UserContextProvider>
+      <Flex flexDirection={'column'}>
+        <ViewVideo ref={videoRef} />
+        <button onClick={handlePlay}>Play</button>
+        <button onClick={handlePause}>Pause</button>
+      </Flex>
     </Wrapper>
   )
 }
